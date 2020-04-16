@@ -1,0 +1,129 @@
+{% extends "TicketDisplay/base.html" %}
+{% block content %}
+	<audio id="notification">
+        <source src="/static/TicketDisplay/open-ended.mp3" type="audio/mpeg">
+    </audio>
+    <div class="row">
+		<h1 class="col-lg-12 display-3">RETARD</h1>
+		<div class="pl-4 col-lg-12"><b>Re</b>quest <b>T</b>r<b>a</b>cke<b>r</b> <b>D</b>ashboard</div>
+	</div>
+	<div class="row justify-content-center mt-5">
+		{% for ticket in tickets %}
+		<div id="ticket-{{forloop.counter}}-box" class="col-lg-3 m-2 mb-5 border custom-shadow p-3 bg-white rounded">
+					<div class="border-bottom p-2 text-lg-left">
+						<h3 id="id-{{forloop.counter}}">Ticket #{{ ticket.broj_ticketa}}
+							{% if ticket.custom_fields.Prioritet == "Visoki" %}
+								<span id="priority-{{forloop.counter}}" class="badge badge-danger">Visoki</span>
+							{% endif %}
+							{% if ticket.custom_fields.Prioritet == "Srednji" %}
+								<span id="priority-{{forloop.counter}}" class="badge badge-warning">Srednji</span>
+							{% endif %}
+							{% if ticket.custom_fields.Prioritet == "Niski" %}
+								<span id="priority-{{forloop.counter}}" class="badge badge-primary">Niski</span>
+							{% endif %}
+							{% if ticket.new %}
+								<span id="new-{{forloop.counter}}" class="badge badge-success">Novi</span>
+							{% endif %}
+						</h3>
+					</div>
+					<div class="pr-2 pl-2 pb-2 pt-2">
+						{% if ticket.naslov %}
+								<div class="mb-1 div-text-center"><h5 id="title-{{forloop.counter}}">{{ticket.naslov}}</h5></div>
+						{% else %}
+								<div class="mb-1 div-text-center"><h5 id="title-{{forloop.counter}}">Bez naslova</h5></div>
+						{% endif %}
+								
+						<div id="prijavitelj-{{forloop.counter}}" class="mb-1">Prijavitelj: {{ticket.prijavitelj}} </div>
+						<div id="mail-{{forloop.counter}}" class="mb-1">Email: {{ticket.mail}} </div>
+						<div id="custom_fields-{{forloop.counter}}">
+							{% for x,y in ticket.custom_fields.items %}
+								<div class="mb-1">{{x}}: {{y}}</div>
+							{% endfor %}
+						</div>
+						<p id="problem-{{forloop.counter}}"class="border-top mt-3 mb-0 pt-2 text-truncate2 text-justify">Opis problema: {{ticket.opis_problema | safe}} </p>
+					</div>
+		</div>
+		{% endfor %}
+	</div>
+	<div class="text-muted footer pb-3">RETARD v0.1 © Mušac Usluge d.o.o.</div>
+    <script type="text/javascript">
+
+    var notification;
+ 	notification = document.getElementById("notification");
+
+	$(document).ready(function(){
+		setInterval(ajax_refresh,120000);
+	});
+
+    function ajax_refresh()
+    {   
+      	$.ajax(
+      		{
+      			url: "/refresh",
+      			type: "GET",
+
+      		success: function(result)
+      		{
+	      		var ticket;
+	      		var tickets = JSON.parse(result);
+	      		i = 0;
+	      		var badge_type = "";
+	    
+	      		for (; i<tickets.length ; )
+	      		{	
+	      			if(tickets[i].new)
+	      			{
+	      				$('#ticket-'+(i+1)+'-box').fadeOut(500, function(){ 
+
+	      				});
+	      			}
+	      			$("#id-"+(i+1)).text("Ticket #"+tickets[i].broj_ticketa+" ");
+	      			if(tickets[i].custom_fields.Prioritet === "Visoki")
+	      			{
+	      				badge_type = "badge-danger";
+	      			}
+	      			if(tickets[i].custom_fields.Prioritet === "Srednji")
+	      			{
+	      				badge_type = "badge-warning";
+	      			}
+	      			if(tickets[i].custom_fields.Prioritet === "Niski")
+	      			{
+	      				badge_type = "badge-primary";
+	      			}
+
+	      			$("#id-"+(i+1)).append("<span id=\"priority-"+(i+1)+"\""+"class=\"badge "+badge_type+"\">"+tickets[i].custom_fields.Prioritet+"</span>");
+
+	      			if (tickets[i].naslov === "")
+	      				tickets[i].naslov = "Bez naslova";
+	      			else
+	      				$("#title-"+(i+1)).text(tickets[i].naslov);
+	      			$("#prijavitelj-"+(i+1)).text("Prijavitelj: " +tickets[i].prijavitelj);
+	      			$("#mail-"+(i+1)).text("Email: "+tickets[i].mail);
+	      			$("#custom_fields-"+(i+1)).children().remove();
+
+	      			for(j in tickets[i].custom_fields)
+	      			{
+	      				$("#custom_fields-"+(i+1)).append("<div class=\"mb-1\">"+j+": "+tickets[i].custom_fields[j]+"</div>");
+	      			}
+
+	      			$("#problem-"+(i+1)).text("Opis problema: "+(tickets[i].opis_problema)); //Specijalni znakovi dodat 
+
+					if(tickets[i].new)
+	      			{
+	      				
+	      				$("#id-"+(i+1)).append("<span id=\"new-"+(i+1)+"\" "+"class=\"ml-1 badge badge-success\">"+"Novi</span>");
+	      				$('#ticket-'+(i+1)+'-box').fadeIn(500);
+	      				$('#ticket-'+(i+1)+'-box').fadeOut(500);
+	      				$('#ticket-'+(i+1)+'-box').fadeIn(500);
+	      				$('#ticket-'+(i+1)+'-box').fadeOut(500);
+	      				$('#ticket-'+(i+1)+'-box').fadeIn(500);
+	      				notification.play();
+	      			}
+
+	      		++i;
+	      		}
+	      	}});
+      }
+	</script>
+
+{% endblock content %}
