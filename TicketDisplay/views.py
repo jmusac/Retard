@@ -48,7 +48,7 @@ def returnTickets():
 	top_id = 0 #previous highest ticket
 	problem_desc = ''
 
-	last_3_tickets = Tickets.objects.filter(Q(queue__id__gt=4 , queue__id__lt=13) | (Q(queue__id=30))
+	last_3_tickets = Tickets.objects.using('ticket-db').filter(Q(queue__id__gt=4 , queue__id__lt=13) | (Q(queue__id=30))
 									| (Q(queue__id=32))).order_by('-id')[:3] # obtaining only "Sluzba za Informatiku" last 3 tickets
 
 	with open('TicketDisplay/files/ticket_ids.txt', 'r') as json_file:
