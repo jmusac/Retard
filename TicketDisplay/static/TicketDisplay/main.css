@@ -49,3 +49,94 @@ body {
   right: 0 !important;
   text-align: center !important;
 }
+
+
+a.ticket_link
+{
+  color: #343a40 !important;
+}
+
+a.ticket_link:hover {
+  text-decoration: none !important;
+  color: #C1BFBF !important;
+}
+
+.card
+{
+  border: none;
+}
+
+.card-header
+{
+  background-color: #ffffff;
+}
+
+.card-font
+{
+  font-size: .8rem;
+  font-weight: 700!important;
+}
+
+.cfont-1
+{
+  color: #1cc88a!important;
+}
+
+.cfont-2
+{
+  color: #cc0000!important;
+}
+
+.cfont-3
+{
+  color: #f6c23e!important;
+}
+
+.cfont-4
+{
+  color: #4e73df!important;
+}
+
+
+.card-border-1 {
+    border-top: .25rem solid #1cc88a!important;
+}
+
+.card-border-2 {
+    border-top: .25rem solid #ff5050!important;
+}
+
+.card-border-3 {
+    border-top: .25rem solid #f6c23e!important;
+}
+
+.card-border-4 {
+    border-top: .25rem solid #4e73df!important;
+}
+
+i.fas,
+i.far,
+i.fab {
+    color: rgb(221, 223, 235);
+  }
+
+i.header
+{
+  color:rgba(0,0,0,.5)!important;
+}
+
+img.profile
+{
+  padding: .25rem;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: .25rem;
+  width: 128px;
+  height: 128px;
+}
+
+img.rankings
+{
+  width:40px;
+  height:40px;
+}

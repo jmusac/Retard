@@ -91,7 +91,8 @@ class Tickets(models.Model):
     started = models.DateTimeField(db_column='Started', blank=True, null=True)  # Field name made lowercase.
     due = models.DateTimeField(db_column='Due', blank=True, null=True)  # Field name made lowercase.
     resolved = models.DateTimeField(db_column='Resolved', blank=True, null=True)  # Field name made lowercase.
-    lastupdatedby = models.IntegerField(db_column='LastUpdatedBy')  # Field name made lowercase.
+    #lastupdatedby = models.IntegerField(db_column='LastUpdatedBy')  # Field name made lowercase.
+    lastupdatedby = models.ForeignKey(Users, on_delete=models.PROTECT, db_column='LastUpdatedBy', related_name='solver')  # Field name made lowercase.
     lastupdated = models.DateTimeField(db_column='LastUpdated', blank=True, null=True)  # Field name made lowercase.
     #creator = models.IntegerField(db_column='Creator')  # Field name made lowercase.
     creator = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='Creator')  # Field name made lowercase.

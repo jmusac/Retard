@@ -1,0 +1,13 @@
+{% extends "TicketDisplay/base.html" %}
+{% block content %}
+<div class="row justify-content-center pt-4">
+	<div class="card custom-shadow">
+		<div class="card-body">
+			<h3>You have been logged out</h3>
+			<div class="border-top pt-3">
+				<small class="text-muted">Log In Again ?><a class="ml-2" href="{% url 'login' %}">Log In</a></small>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}

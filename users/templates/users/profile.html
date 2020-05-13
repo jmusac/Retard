@@ -1,0 +1,32 @@
+{% extends "TicketDisplay/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+	
+	<div class="row justify-content-center pt-4">
+	<div class="card custom-shadow">
+			<div class="card-body">
+				<div class="row no-gutters align-items-center">
+					<div class="col">
+						<img class="profile rounded-circle" src="{{ user.profile.image.url }}">
+					</div>
+					<div class="col">
+						<h2>{{ user.first_name}} {{user.last_name}}</h2>
+						<p class="text-secondary">{{ user.email }}</p>
+					</div>
+				</div>
+				<form method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+					<fieldset class="form-group">
+						<legend class="border-bottom mb-4">Profile Info</legend>
+							{{ u_form|crispy }}
+							{{ p_form|crispy }}
+					</fieldset>
+					<div class="form-group">
+						<button class="btn btn-outline-info" type="submit">Update</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}

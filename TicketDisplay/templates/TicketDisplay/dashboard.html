@@ -1,0 +1,487 @@
+{% extends "TicketDisplay/base.html" %}
+{% block content %}
+<div class="row mt-4">
+	<div class="col-lg-3 col-md-6">
+		<h5>Admin Dashboard</h4>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-3 col-sm-6 mb-4">
+		<div class="card card-border-1 shadow-sm h-100">
+			<div class="card-body">
+				<div class="row no-gutters align-items-center">
+					<div class="col">
+						<div class="text-uppercase card-font cfont-1">
+							Solved (today):
+						</div>
+						<div class="h3 mb-0">
+							{{ header.today_count }}
+						</div>
+					</div>
+					<div class="col-auto">
+						<i class="fas fa-clipboard-check fa-2x"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3 col-sm-6 mb-4">
+		<div class="card card-border-2 shadow-sm h-100">
+			<div class="card-body">
+				<div class="row no-gutters align-items-center">
+					<div class="col">
+						<div class="text-uppercase card-font cfont-2">
+							Solved (this month):
+						</div>
+						<div class="h3 mb-0">
+							{{ header.month_count }}
+						</div>
+					</div>
+					<div class="col-auto">
+						<i class="far fa-calendar-alt fa-2x"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3 col-sm-6 mb-4">
+		<div class="card card-border-3 shadow-sm h-100">
+			<div class="card-body">
+				<div class="row no-gutters align-items-center">
+					<div class="col">
+						<div class="text-uppercase card-font-3 card-font cfont-3">
+							Best (today):
+						</div>
+						<div class="h5 mb-0">
+							{{ header.best_today }}: {{ header.best_today_count}} solved
+						</div>
+					</div>
+					<div class="col-auto">
+						<i class="fas fa-award fa-2x"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-3 col-sm-6 mb-4">
+		<div class="card card-border-4 shadow-sm h-100">
+			<div class="card-body">
+				<div class="row no-gutters align-items-center">
+					<div class="col">
+						<div class="text-uppercase card-font cfont-4">
+							Best (month):
+						</div>
+						<div class="h5 mb-0">
+							{{ header.best_month }}: {{ header.best_month_count}} solved
+						</div>
+					</div>
+					<div class="col-auto">
+						<i class="fas fa-crown fa-2x"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xl-5 col-lg-9 col-md-12 order-1 mb-4" id="chart-1">
+		<div class="card custom-shadow">
+			<div class="card-header text-uppercase">
+				New vs. Resolved
+				<div class="float-right">
+					<div class="dropdown">
+						<a href="#" data-toggle="dropdown">
+							<svg class="bi bi-three-dots-vertical" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  							<path fill-rule="evenodd" d="M9.5 13a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clip-rule="evenodd"/>
+							</svg>
+						</a>
+						<div class="dropdown-menu dropdown-menu-right">
+    						<a id="line_7" class="dropdown-item" href="#">Last 7 days</a>
+    						<a id="line_30" class="dropdown-item" href="#">Last 30 days</a>
+  						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-body">
+				<canvas id="myChart"></canvas>
+			</div>
+		</div>
+	</div>
+	<div class="col-xl-5 col-lg-12 col-md-8 order-2 order-lg-3 order-md-2 mb-4" id="chart-2">
+		<div class="card custom-shadow">
+			<div class="card-header text-uppercase">
+				Total unsolved
+				<div class="float-right">
+					<div class="dropdown">
+						<a href="#" data-toggle="dropdown">
+							<svg class="bi bi-three-dots-vertical" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  							<path fill-rule="evenodd" d="M9.5 13a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clip-rule="evenodd"/>
+							</svg>
+						</a>
+						<div class="dropdown-menu dropdown-menu-right">
+    						<a id="bar_7" class="dropdown-item" href="#">Last 7 days</a>
+    						<a id="bar_30" class="dropdown-item" href="#">Last 30 days</a>
+  						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-body">
+				<canvas id="myChart2"></canvas>
+			</div>
+		</div> 
+	</div>
+	<div class="col-xl-2 col-lg-3 col-md-4 order-3 order-xl-3 order-lg-2 order-md-3 d-flex mb-4" id="chart-2">
+		<div class="card flex-fill w-100 custom-shadow">
+			<div class="row no-gutters align-items-center">
+				<div class="col">
+					<div class="card-header">
+						RANKINGS
+						<div class="float-right">
+							<div class="dropdown">
+								<a href="#" data-toggle="dropdown">
+									<svg class="bi bi-three-dots-vertical" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  									<path fill-rule="evenodd" d="M9.5 13a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clip-rule="evenodd"/>
+									</svg>
+								</a>
+								<div class="dropdown-menu dropdown-menu-right">
+    								<a id="hours_7" class="dropdown-item" href="#">HOURS - last 7 days</a>
+    								<a id="hours_30" class="dropdown-item" href="#">HOURS - last 30 days</a>
+    								<a id="solved_7" class="dropdown-item" href="#">SOLVED - last 7 days</a>
+    								<a id="solved_30" class="dropdown-item" href="#">SOLVED - last 30 days</a>
+  								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				
+			</div>
+			<div class="card-body p-2">
+				<table class="table">
+					<tbody id="ranking-body">
+						{% for name,count in rankings.items %}
+						<tr>
+							<td class="p-2 border-top-0 border-bottom"><img class="rounded-circle rankings" src="/media/inf_pics/{{name}}.png"></td>
+							<td class="p-2 border-top-0 border-bottom">{{ name }}</td>
+							<td class="p-2 border-top-0 border-bottom">{{ count }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div> 
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-6 col-md-12 mb-4">
+		<div class="card custom-shadow">
+			<div class="card-header text-uppercase">
+				CATEGORY DISTRIBUTION
+				<div class="float-right">
+					<div class="dropdown">
+						<a href="#" data-toggle="dropdown">
+							<svg class="bi bi-three-dots-vertical" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  							<path fill-rule="evenodd" d="M9.5 13a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clip-rule="evenodd"/>
+							</svg>
+						</a>
+						<div class="dropdown-menu dropdown-menu-right">
+    						<a id="category_dist" class="dropdown-item" href="#">This month</a>
+    						<a id="category_dist_90" class="dropdown-item" href="#">Last 3 months</a>
+  						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-body">
+				<canvas id="myChart3"></canvas>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-6 col-md-12 mb-4">
+		<div class="card custom-shadow">
+			<div class="card-header text-uppercase">
+				HOURS DISTRIBUTION
+				<div class="float-right">
+					<div class="dropdown">
+						<a href="#" data-toggle="dropdown">
+							<svg class="bi bi-three-dots-vertical" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  							<path fill-rule="evenodd" d="M9.5 13a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clip-rule="evenodd"/>
+							</svg>
+						</a>
+						<div class="dropdown-menu dropdown-menu-right">
+    						<a id="hours_dist" class="dropdown-item" href="#">This month</a>
+    						<a id="hours_dist_90" class="dropdown-item" href="#">Last 3 months</a>
+  						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-body">
+				<canvas id="myChart4"></canvas>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+
+var line_config = {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+        //labels: {{ day_names | safe }},
+        labels: {{ day_names | safe}},
+        datasets: [{
+            label: 'New',
+            borderColor: 'rgb(255, 80, 80)',
+            backgroundColor: 'rgba(255, 80, 80, 0.2)',
+            data: {{ created_7}}
+        },
+        {
+            label: 'Resolved',
+            borderColor: 'rgb(28, 200, 138)',
+            backgroundColor: 'rgba(28, 200, 138, 0.2)',
+            data: {{ resolved_7 }}
+        }]
+    },
+
+    // Configuration options go here
+    options: {}
+};
+
+var bar_config = {
+    type: 'bar',
+    data: {
+        labels: {{ day_names | safe }},
+        datasets: [{
+            label: '# of Not Started',
+            data: {{ new_7 }},
+            backgroundColor: 'rgb(246, 194, 62)',
+        },
+        {
+        	label: '# of Open',
+            data: {{ open_7 }},
+            backgroundColor: 'rgb(78, 115, 223)'
+        }
+        ]
+    },
+    options: {
+        scales: {
+        	xAxes: [{
+                stacked: true
+            }],
+            yAxes: [{
+            	stacked: true,
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+};
+
+var pie_config = {
+    type: 'pie',
+    data: {
+    datasets: [{
+        data: {{ category_count | safe }},
+         backgroundColor: [
+                'rgb(255, 80, 80)',
+                'rgb(229, 222, 24)',
+                'rgb(58, 203, 203)',
+                'rgb(78, 115, 223)',
+                'rgb(153, 102, 255)',
+                'rgb(28, 200, 138)',
+                'rgb(246, 194, 62)',
+                'rgb(255, 159, 64)'
+        ],
+    }],
+
+    labels: {{ category | safe }}
+	},
+
+	options: {
+		legend: {
+			position: 'right'
+		}
+	}
+
+};
+
+var doughnut_config = {
+    type: 'doughnut',
+    data: {
+    datasets: [{
+        data: {{ hours_count | safe }},
+         backgroundColor: [
+                'rgb(255, 80, 80)',
+                'rgb(229, 222, 24)',
+                'rgb(58, 203, 203)',
+                'rgb(78, 115, 223)',
+                'rgb(153, 102, 255)',
+                'rgb(28, 200, 138)',
+                'rgb(246, 194, 62)',
+                'rgb(255, 159, 64)'
+        ],
+    }],
+
+    labels: {{ hours_category | safe }}
+	},
+
+	options: {
+		legend: {
+			position: 'right'
+		}
+	}
+
+};
+
+var ctx = document.getElementById('myChart').getContext('2d');
+window.line_chart = new Chart(ctx, line_config);
+
+ctx = document.getElementById('myChart2').getContext('2d');
+window.bar_chart = new Chart(ctx, bar_config);
+
+ctx = document.getElementById('myChart3').getContext('2d');
+var pie_chart = new Chart(ctx, pie_config);
+
+ctx = document.getElementById('myChart4').getContext('2d');
+var doughnut_chart = new Chart(ctx, doughnut_config);
+
+$("#line_30").click(function(){
+	line_config.data.labels = {{ dates | safe }};
+	line_config.data.datasets[0].data = {{ created_30 }};
+	line_config.data.datasets[1].data = {{ resolved_30 }};
+	window.line_chart.update();
+});
+
+$("#line_7").click(function(){
+	line_config.data.labels = {{ day_names | safe }};
+	line_config.data.datasets[0].data = {{ created_7 }};
+	line_config.data.datasets[1].data = {{ resolved_7 }};
+	window.line_chart.update();
+});
+
+$("#bar_7").click(function(){
+	bar_config.data.labels = {{ day_names | safe }};
+	bar_config.data.datasets[0].data = {{ new_7 }};
+	bar_config.data.datasets[1].data = {{ open_7 }};
+	window.bar_chart.update();
+});
+
+$("#bar_30").click(function(){
+	bar_config.data.labels = {{ dates | safe }};
+	bar_config.data.datasets[0].data = {{ new }};
+	bar_config.data.datasets[1].data = {{ open }};
+	window.bar_chart.update();
+});
+
+$("#solved_30").click(function(){
+	var rank = {{ rankings_30 | safe}};
+	var txt1, txt2, txt3, txt4, txt5;
+	$("#ranking-body").html("");
+	//$("#ranking_title").text($('#solved_30').text());
+
+	for(var key in rank)
+	{
+		if (rank.hasOwnProperty(key))
+		{
+			txt1 = "<tr><td class=\"p-2 border-top-0 border-bottom\">";
+			txt2 = "<img src=\"/media/inf_pics/"+key+".png\" class=\"rounded-circle rankings\"></td>";
+			txt3 = "<td class=\"p-2 border-top-0 border-bottom\">"+key+"</td>";
+			txt4 = "<td class=\"p-2 border-top-0 border-bottom\">"+rank[key]+"</td></tr>";
+			txt5 = txt1 + txt2 + txt3 + txt4;
+			//$("#ranking-body").html("<tr><td class=\"p-2 border-top-0 border-bottom\">");
+			$("#ranking-body").append(txt5);
+		}	
+	}
+});
+
+$("#solved_7").click(function(){
+	var rank = {{ rankings | safe}};
+	var txt1, txt2, txt3, txt4, txt5;
+	$("#ranking-body").html("");
+	//$("#ranking_title").text($('#solved_7').text());
+
+	for(var key in rank)
+	{
+		if (rank.hasOwnProperty(key))
+		{
+			txt1 = "<tr><td class=\"p-2 border-top-0 border-bottom\">";
+			txt2 = "<img src=\"/media/inf_pics/"+key+".png\" class=\"rounded-circle rankings\"></td>";
+			txt3 = "<td class=\"p-2 border-top-0 border-bottom\">"+key+"</td>";
+			txt4 = "<td class=\"p-2 border-top-0 border-bottom\">"+rank[key]+"</td></tr>";
+			txt5 = txt1 + txt2 + txt3 + txt4;
+			//$("#ranking-body").html("<tr><td class=\"p-2 border-top-0 border-bottom\">");
+			$("#ranking-body").append(txt5);
+		}	
+	}
+});
+
+$("#hours_7").click(function(){
+	var rank = {{ rankings_hours | safe}};
+	var txt1, txt2, txt3, txt4, txt5;
+	$("#ranking-body").html("");
+	//$("#ranking_title").text($('#hours_7').text());
+
+	for(var key in rank)
+	{
+		if (rank.hasOwnProperty(key))
+		{
+			txt1 = "<tr><td class=\"p-2 border-top-0 border-bottom\">";
+			txt2 = "<img src=\"/media/inf_pics/"+key+".png\" class=\"rounded-circle rankings\"></td>";
+			txt3 = "<td class=\"p-2 border-top-0 border-bottom\">"+key+"</td>";
+			txt4 = "<td class=\"p-2 border-top-0 border-bottom\">"+rank[key]+"</td></tr>";
+			txt5 = txt1 + txt2 + txt3 + txt4;
+			//$("#ranking-body").html("<tr><td class=\"p-2 border-top-0 border-bottom\">");
+			$("#ranking-body").append(txt5);
+		}	
+	}
+});
+
+$("#hours_30").click(function(){
+	var rank = {{ rankings_hours_30 | safe}};
+	var txt1, txt2, txt3, txt4, txt5;
+	$("#ranking-body").html("");
+	//$("#ranking_title").text($('#hours_30').text());
+
+	for(var key in rank)
+	{
+		if (rank.hasOwnProperty(key))
+		{
+			txt1 = "<tr><td class=\"p-2 border-top-0 border-bottom\">";
+			txt2 = "<img src=\"/media/inf_pics/"+key+".png\" class=\"rounded-circle rankings\"></td>";
+			txt3 = "<td class=\"p-2 border-top-0 border-bottom\">"+key+"</td>";
+			txt4 = "<td class=\"p-2 border-top-0 border-bottom\">"+rank[key]+"</td></tr>";
+			txt5 = txt1 + txt2 + txt3 + txt4;
+			//$("#ranking-body").html("<tr><td class=\"p-2 border-top-0 border-bottom\">");
+			$("#ranking-body").append(txt5);
+		}	
+	}
+});
+
+$("#category_dist").click(function(){
+	pie_config.data.labels = {{ category | safe}};
+	pie_config.data.datasets[0].data = {{ category_count | safe }};
+	window.pie_chart.update();
+});
+
+$("#category_dist_90").click(function(){
+	pie_config.data.labels = {{ category_big | safe}};
+	pie_config.data.datasets[0].data = {{ category_count_big | safe }};
+	window.pie_chart.update();
+});
+
+$("#hours_dist").click(function(){
+	doughnut_config.data.labels = {{ hours_category | safe}};
+	doughnut_config.data.datasets[0].data = {{ hours_count | safe }};
+	window.doughnut_chart.update();
+});
+
+$("#hours_dist_90").click(function(){
+	doughnut_config.data.labels = {{ hours_category_big | safe}};
+	doughnut_config.data.datasets[0].data = {{ hours_count_big | safe }};
+	window.doughnut_chart.update();
+});
+
+</script>
+{% endblock content %}
